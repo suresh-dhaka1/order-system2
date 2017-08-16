@@ -7,18 +7,26 @@ http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/cor
     <spring:beans>
         <spring:import resource="classpath:order-systems2.xml"/>
     </spring:beans>
-    <munit:test name="processOrders2_payloadReturnsTwoElementsOfTypeJavaMap_True" description="Calling process orders2 flow set returns payload containing TWO key/value pairs of type java map">
+    <munit:before-test name="processOrders2-test-suiteBefore_Test" description="Before tests actions">
         <munit:set payload="#[[{'orderID':444, 'location':'worldwide','price':44.04}, {'orderID':555, 'location':'worldwide','price':55.05}, {'orderID':333, 'location':'national','price':33.03}]]" doc:name="Set Message Payload contans International and Domestic Orders"/>
+    </munit:before-test>
+    <munit:test name="processOrders2_payloadReturnsTwoElementsOfTypeJavaMap_True" description="Calling process orders2 flow set returns payload containing TWO key/value pairs of type java map">
         <flow-ref name="process-orders" doc:name="Flow Reference: process-orders"/>
         <munit:assert-true message="FAILED: Expected payloads datatype to be Java Map, but found #[payload.getClass().getName()] instead!" condition="#[payload is java.util.Map]" doc:name="Assert True : Validate the data types is Java Map"/>
         <munit:assert-on-equals message="FAILED: Expected payload to contain TWO key/value pairs but found #[payload.size()] pair instead !" expectedValue="#[2]" actualValue="#[payload.size()]" doc:name="Assert Equals : Payload contans two key value pairs"/>
     </munit:test>
-    <munit:test name="processOrders2-test-suite-process-ordersTest" description="Test">
-        <munit:set payload="#[[{'orderID':444, 'location':'worldwide','price':44.04}, {'orderID':555, 'location':'worldwide','price':55.05}, {'orderID':333, 'location':'national','price':33.03}]]" doc:name="Set Message Payload contans International and Domestic Orders"/>
+    <munit:test name="processOrders2_InternationalKeyContainsWorldwideOrders" description="Test">
         <flow-ref name="process-orders" doc:name="Flow-ref to process-orders"/>
         <munit:assert-true message="FAILED: There are no row in the international key" condition="#[payload.international.size()&gt;0]" doc:name="Assert True: The  international has some key"/>
         <foreach collection="#[payload.international]" rootMessageVariableName="rowMessage" doc:name="For Each: Row in international key, do...">
             <munit:assert-on-equals message="FAILED: Expected location to be worldwide but found #[payload.'location'] at row# [flowVars.counter] instead" expectedValue="#['worldwide']" actualValue="#[payload.location]" doc:name="Assert Equals : "/>
+        </foreach>
+    </munit:test>
+     <munit:test name="processOrders2_domesticKeyContainsNationalOrders" description="Test">
+        <flow-ref name="process-orders" doc:name="Flow-ref to process-orders"/>
+        <munit:assert-true message="FAILED: There are no row in the Domestic key" condition="#[payload.domestic.size()&gt;0]" doc:name="Assert True: The  Domestic has some key"/>
+        <foreach collection="#[payload.domestic]" rootMessageVariableName="rowMessage" doc:name="For Each: Row in Domestic key, do...">
+            <munit:assert-on-equals message="FAILED: Expected location to be national but found #[payload.'location'] at row# [flowVars.counter] instead" expectedValue="#['national']" actualValue="#[payload.location]" doc:name="Assert Equals : "/>
         </foreach>
     </munit:test>
 </mule>
