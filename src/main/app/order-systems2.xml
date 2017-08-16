@@ -7,7 +7,7 @@ http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/cor
  
     
     <flow name="process-orders">
-     <http:listener config-ref="HTTP_Listener_Configuration_mule" path="/sayHello" doc:name="HTTP" allowedMethods="GET"/>
+    
         <set-payload value="#[{'international': java.util.Map&lt;&gt;[], 'domestic': java.util.Map&lt;&gt;[]}]" doc:name="Set Payload: Set Payload to Order Schema"/>
     </flow>
 </mule>
