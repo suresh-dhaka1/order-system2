@@ -20,12 +20,15 @@ http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/cor
         <munit:assert-on-equals message="FAILED:  Expected fname to contain Suresh, but found #[flowVars.fname]" expectedValue="#['Suresh']" actualValue="#[flowVars.fname]" doc:name="Assert Equals: fname=Suresh"/>
     </munit:test>
     <munit:test name="sayHello-test-suite-sayHelloTest1" description="Test">
-        <munit:set payload="#[]	" doc:name="Set Message : Set Query Param &quot;name&quot;">
+        <munit:set payload="#[] " doc:name="Set Message : Set Query Param &quot;name&quot;">
             <munit:inbound-properties>
                 <munit:inbound-property key="http.query.params" value="#[{'name':'suresh1'}]"/>
             </munit:inbound-properties>
         </munit:set>
         <flow-ref name="sayHello" doc:name="Flow-ref to sayHello"/>
         <munit:assert-on-equals message="FAILED:  Expected fname to contain Suresh, but found #[flowVars.fname]" expectedValue="#['Suresh']" actualValue="#[flowVars.fname]" doc:name="Assert Equals: fname=Suresh"/>
+    </munit:test>
+    <munit:test name="sayHello-test-suite-sayHelloTest2" description="Test">
+        <flow-ref name="sayHello" doc:name="Flow-ref to sayHello"/>
     </munit:test>
 </mule>
