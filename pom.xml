@@ -19,7 +19,7 @@
 		<mule.munit.support.version>3.8.4</mule.munit.support.version>
 		<uid>sureshd@datacom.co.nz</uid>
 		<password>garbage</password>
-		<env>Production</env>
+		<env>Sandbox</env>
 	</properties>
 
 	<build>
